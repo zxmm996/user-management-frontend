@@ -7,7 +7,10 @@
           <h3>用户登录</h3>
           <a-form-item
             fieldDecoratorId="username"
-            :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入用户名' }]}"
+            :fieldDecoratorOptions="{
+              initialValue: username,
+              rules: [{ required: true, message: '请输入用户名' }]
+              }"
           >
             <a-input size="large">
               <a-icon slot="prefix" type="user" size="large" />
@@ -15,13 +18,22 @@
           </a-form-item>
           <a-form-item
             fieldDecoratorId="password"
-            :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入密码' }]}"
+            :fieldDecoratorOptions="{
+              initialValue: password,
+              rules: [{ required: true, message: '请输入密码' }],
+              }"
           >
             <a-input size="large">
               <a-icon slot="prefix" type="lock" size="large" />
             </a-input>
           </a-form-item>
-          <a-form-item fieldDecoratorId="remember">
+          <a-form-item
+            fieldDecoratorId="remember"
+            :fieldDecoratorOptions="{
+              initialValue: remember === '1',
+              valuePropName: 'checked'
+              }"
+          >
             <a-checkbox>记住密码</a-checkbox>
           </a-form-item>
           <a-button class="login-btn" type="primary" size="large" @click="handleSubmit">登录</a-button>
@@ -49,16 +61,23 @@
       Header,
       Footer,
     },
+    data() {
+      return{
+        username: localStorage.getItem('username'),
+        password: localStorage.getItem('password'),
+        remember: localStorage.getItem('remember'),
+      }
+    },
     methods: {
       handleSubmit (e) {
       e.preventDefault()
       this.form.validateFields((err, values) => {
         if (!err) {
           console.log('Received values of form: ', values)
-          const { username, password, remember } = values;
-          if (username === 'admin' && password === 'admin') {
-            this.$router.push('/home');
-          }
+          this.$store.dispatch('login', {
+            ...values,
+            router: this.$router,
+          })
         }
       })
     },

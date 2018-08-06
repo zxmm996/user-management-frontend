@@ -1,15 +1,23 @@
 <template>
   <div>
-    <div class="header">header</div>
+    <Header></Header>
+    <Menus></Menus>
     <div class="content">
       <router-view></router-view>
     </div>
-    <div class="footer">footer</div>
+    <Footer></Footer>
   </div>
 </template>
 <script>
+  import Header from '../components/Layout/Header';
+  import Footer from '../components/Layout/Footer';
+  import Menus from '../components/Layout/Menus';
   export default {
-
+    components: {
+      Header,
+      Footer,
+      Menus,
+    }
   }
 </script>
 <style lang="less" scoped>
@@ -25,6 +33,11 @@
   }
   .content {
     min-height: 400px;
+    width: 1200px;
+    margin: 10px auto 0;
+    background: #fff;
+    border-radius: 5px;
+    padding: 10px;
   }
 </style>
 

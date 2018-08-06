@@ -19,6 +19,9 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
+body {
+  background: #efefef;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

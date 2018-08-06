@@ -17,8 +17,9 @@ export default {
 </script>
 <style lang="less" scoped>
  .header {
-    height: 100px;
-    line-height: 100px;
+    height: 80px;
+    line-height: 80px;
+    background: #fff;
 
     .header-content {
       width: 1200px;

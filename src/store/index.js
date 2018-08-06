@@ -11,7 +11,6 @@ const store = new Vuex.Store({
     isRemember: false,
   },
   mutations: {
-
   },
   actions: {
     login(store, { username, password, remember, router}) {

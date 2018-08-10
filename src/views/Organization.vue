@@ -1,7 +1,7 @@
 <template>
   <a-layout>
       <a-layout-sider class="sider">
-        <org-tree :treeList="[]"></org-tree>
+        <org-tree :treeList="orgList"></org-tree>
       </a-layout-sider>
       <a-layout-content class="content">Content</a-layout-content>
     </a-layout>
@@ -18,6 +18,14 @@ Vue.component(Layout.Content.name, Layout.Content);
 export default {
   components: {
     OrgTree,
+  },
+  computed: {
+    orgList() {
+      return this.$store.state.orgList;
+    }
+  },
+  created() {
+    this.$store.dispatch('getOrgList');
   }
 }
 </script>

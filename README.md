@@ -1,6 +1,6 @@
 # user-management
 
-> A Vue.js project
+> A Vue.js project. Use vue vuex vue-router ant-design-vue
 
 ## Build Setup
 

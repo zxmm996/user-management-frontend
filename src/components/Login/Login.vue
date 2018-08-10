@@ -23,7 +23,7 @@
               rules: [{ required: true, message: '请输入密码' }],
               }"
           >
-            <a-input size="large">
+            <a-input size="large" @keyup.enter="handleSubmit">
               <a-icon slot="prefix" type="lock" size="large" />
             </a-input>
           </a-form-item>
@@ -36,7 +36,7 @@
           >
             <a-checkbox>记住密码</a-checkbox>
           </a-form-item>
-          <a-button class="login-btn" type="primary" size="large" @click="handleSubmit">登录</a-button>
+          <a-button class="login-btn" type="primary" size="large"  @click="handleSubmit">登录</a-button>
         </a-form>
       </div>
     </div>

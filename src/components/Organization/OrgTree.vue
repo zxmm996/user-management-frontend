@@ -1,12 +1,12 @@
 <script>
 import Vue from 'vue';
-import { Menu, Icon, Popconfirm } from 'ant-design-vue';
+import { Menu, Icon, Modal } from 'ant-design-vue';
 
 Vue.component(Icon.name, Icon);
-Vue.component(Popconfirm.name, Popconfirm);
 Vue.component(Menu.name, Menu);
 Vue.component(Menu.Item.name, Menu.Item);
 Vue.component(Menu.SubMenu.name, Menu.SubMenu);
+
 export default {
   name: 'OrgTree',
   props: {
@@ -16,14 +16,24 @@ export default {
     }
   },
   methods: {
+    // 添加机构
     addOrg(orgId, level) {
       this.$emit('addOrg', orgId, level);
     },
+    // 修改机构
     editOrg(orgId) {
       this.$emit('editOrg', orgId);
     },
+    // 删除机构
     deleteOrg(orgId) {
-      this.$emit('deleteOrg', orgId);
+      Modal.confirm({
+        title: '确认删除？',
+        onOk: () => {
+          this.$emit('deleteOrg', orgId);
+        },
+        okText: '是',
+        cancelText: '否',
+      })
     },
   },
   render() {
@@ -36,9 +46,7 @@ export default {
                 <span>{item.orgName}</span>
                 <a-icon onClick={() => this.addOrg(item._id, item.level)} type="plus-square-o" class="plus" />
                 <a-icon onClick={() => this.editOrg(item._id)} type="edit" class="edit" />
-                <a-popconfirm title="确定删除?" confirm={() => this.deleteOrg(item._id)}  okText="是" cancelText="否">
-                  <a-icon type="delete" class="delete" />
-                </a-popconfirm>
+                <a-icon onClick={() => this.deleteOrg(item._id)}  type="delete" class="delete" />
               </span>
               {getOrgComponent(item.children)}
             </a-sub-menu>
@@ -49,9 +57,7 @@ export default {
               {item.orgName}
               <a-icon onClick={() => this.addOrg(item._id, item.level)} type="plus-square-o" class="plus" />
               <a-icon onClick={() => this.editOrg(item._id)} type="edit" class="edit" />
-              <a-popconfirm title="确定删除?" confirm={() => this.deleteOrg(item._id)} okText="是" cancelText="否">
-                <a-icon type="delete" class="delete" />
-              </a-popconfirm>
+              <a-icon onClick={() => this.deleteOrg(item._id)}  type="delete" class="delete" />
             </a-menu-item>
           )
         }

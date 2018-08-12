@@ -15,28 +15,19 @@ const store = new Vuex.Store({
     orgId: '',
     orgName: '',
     level: 0,
+    userList: [],
+    userModalVisible: false,
+    page: 1,
+    pageSize: 10,
+    total: 0,
+    userId: '',
   },
   mutations: {
+    // 改变state
     changeState(state, payload) {
-      state[payload.type] = payload.value;
-    },
-    addOrg(state, payload) {
-      state.visible = true;
-      state.type = 'add';
-      state.orgName = '';
-      state.orgId = payload.orgId;
-    },
-    editOrg() {
-      state.visible = true;
-      state.type = 'edit';
-      state.orgId = payload.orgId;
-    },
-    deleteOrg() {
-      state.orgId = payload.orgId;
-    },
-    getOrgInfoSuccess(state, { orgName }) {
-      state.orgName = orgName;
-      state.visible = true;
+      for (var key in payload) {
+        state[key] = payload[key];
+      }
     },
   },
   actions: {
@@ -59,8 +50,7 @@ const store = new Vuex.Store({
             localStorage.removeItem('remember');
           }
           store.commit('changeState', {
-            type: 'userInfo',
-            value: data.result,
+            userInfo: data.result,
           })
         } else {
           message.error('账号密码错误', 1);
@@ -72,11 +62,9 @@ const store = new Vuex.Store({
       axios.get('http://localhost:3000/getOrgTree')
       .then(function(res){
         const { data } = res;
-        console.log('data=', data);
         if (data.code === 1 && data.result) {
           store.commit('changeState', {
-            type: 'orgList',
-            value: data.result,
+            orgList: data.result,
           })
         }
       });
@@ -91,9 +79,8 @@ const store = new Vuex.Store({
       .then(function(res){
         const { data } = res;
         store.commit('changeState', {
-          type: 'visible',
-          value: false,
-        })
+          visible: false,
+        });
         if (data.code === 1 && data.result) {
           message.success('添加成功', 1);
           store.dispatch('getOrgList');
@@ -104,12 +91,8 @@ const store = new Vuex.Store({
     },
     getOrgInfo(store, { orgId }) {
       store.commit('changeState', {
-        type: 'orgId',
-        value: orgId,
-      });
-      store.commit('changeState', {
-        type: 'type',
-        value: 'edit',
+        orgId,
+        type: 'edit',
       });
       axios.get('http://localhost:3000/getOrgInfoById', {
         params: {
@@ -119,8 +102,9 @@ const store = new Vuex.Store({
         const { data } = res;
 
         if (data.code === 1 && data.result) {
-          store.commit('getOrgInfoSuccess', {
+          store.commit('changeState', {
             orgName: data.result.orgName,
+            visible: true,
           })
         }
       })
@@ -133,9 +117,8 @@ const store = new Vuex.Store({
       .then(function(res){
         const { data } = res;
         store.commit('changeState', {
-          type: 'visible',
-          value: false,
-        })
+          visible: false,
+        });
         if (data.code === 1 && data.result) {
           message.success('修改成功', 1);
           store.dispatch('getOrgList');
@@ -161,7 +144,116 @@ const store = new Vuex.Store({
           message.error('删除失败', 1);
         }
       })
-    }
+    },
+    getUserList(store) {
+      axios.get('http://localhost:3000/getUserListByPage', {
+        params: {
+          page: store.state.page,
+          pageSize: store.state.pageSize,
+        }
+      }).then((res) => {
+        const { data } = res;
+        let result = [];
+        let total = 0;
+        if (data.code == 1 && data.result && data.result.length > 0) {
+          result = data.result;
+          total = data.total;
+        }
+        store.commit('changeState', {
+          userList: result,
+          total: total,
+        })
+      })
+    },
+    // 添加用户
+    addUser(store, payload) {
+      const {
+        userName,
+        userGender,
+        userBirthday,
+        userNum,
+        userPwd,
+        userOrgId,
+        userPhoneNum,
+      } = payload;
+      axios.post('http://localhost:3000/addUser', {
+        userName,
+        userGender,
+        userBirthday,
+        userNum,
+        userPwd,
+        userOrgId,
+        userPhoneNum,
+      }).then(res => {
+        const { data } =res;
+        if (data.code === 1 && data.result) {
+          message.success('添加用户成功', 1);
+          store.commit('changeState', {
+            userModalVisible: false,
+          })
+          store.dispatch('getUserList');
+        } else {
+          message.error('添加用户失败', 1);
+        }
+      })
+    },
+    // 获取用户信息
+    getUserInfo(store, { userId }) {
+      store.commit('changeState', {
+        userId,
+        type: 'edit',
+      });
+      axios.get('http://localhost:3000/getUserInfoById', {
+        params: {
+          userId,
+        },
+      }).then(res => {
+        const { data } = res;
+        if (data.code === 1 && data.result) {
+          store.commit('changeState', {
+            userInfo: data.result,
+            userModalVisible: true,
+          })
+        }
+      })
+    },
+    // 修改用户
+    editUser(store, { orgName }) {
+      axios.post('http://localhost:3000/updateUser', {
+        orgName,
+        orgId: store.state.orgId,
+      })
+      .then(function(res){
+        const { data } = res;
+        store.commit('changeState', {
+          visible: false,
+        });
+        if (data.code === 1 && data.result) {
+          message.success('修改成功', 1);
+          store.dispatch('getOrgList');
+        } else {
+          message.error('修改失败', 1);
+        }
+      });
+    },
+    // 删除用户
+    deleteUser(store, { orgId }) {
+      axios.get('http://localhost:3000/deleteOrganization', {
+        params: {
+          orgId,
+        },
+      }).then(res => {
+        const { data } = res;
+        if (data.code === 1 && data.result) {
+          message.success('删除成功', 1);
+          store.dispatch('getOrgList');
+        } else if (data.result === false) {
+          message.error('该机构下有子机构，不可删除', 1);
+        } else {
+          message.error('删除失败', 1);
+        }
+      })
+    },
   },
 });
 export default store;

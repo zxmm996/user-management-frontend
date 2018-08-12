@@ -5,13 +5,12 @@
     wrapClassName="vertical-center-modal"
     :visible="visible"
     @ok="confirmHandler"
-    @cancel="() => setModalVisible(false)"
+    @cancel="cancelHandler"
     okText="确定"
     cancelText="取消"
   >
     <a-form :autoFormCreate="(form)=>{this.form = form}">
       <a-form-item
-        :key="visible"
         label="机构"
         :labelCol="{span: 4}"
         :wrapperCol="{span: 18}"
@@ -63,8 +62,8 @@ export default {
           }
         })
     },
-    setModalVisible(value) {
-      this.$emit('setModalVisible', value);
+    cancelHandler() {
+      this.$emit('cancel');
     }
   }
 }

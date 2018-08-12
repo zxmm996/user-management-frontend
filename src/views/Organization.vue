@@ -3,30 +3,59 @@
       <a-layout-sider class="sider">
         <org-tree :treeList="orgList" @addOrg="addOrg" @editOrg="editOrg" @deleteOrg="deleteOrg" ></org-tree>
         <org-modal
+          v-if="visible"
           :type="type"
           :visible="visible"
           :orgName="orgName"
-          @setModalVisible="setModalVisibleHandler"
+          @cancel="cancelHandler"
           @confirm="confirmHandler"
         />
       </a-layout-sider>
-      <a-layout-content class="content">Content</a-layout-content>
+      <a-layout-content class="content">
+        <div class="btns clearfix">
+          <a-button type="danger" class="deleteBtn">删除用户</a-button>
+          <a-button type="primary" class="addBtn" @click="addUserClick">添加用户</a-button>
+        </div>
+        <user-list
+          :userList="userList"
+          :page="page"
+          :pageSize="pageSize"
+          :total="total"
+          @changePage="changePageHandler"
+          @editUser="editUser"
+          @deleteUser="deleteUser"
+        />
+        <user-modal
+          v-if="userModalVisible"
+          :treeList="orgList"
+          :type="type"
+          :visible="userModalVisible"
+          :userInfo="userInfo"
+          @userModalConfirm="userModalConfirmHandler"
+          @userModalCancel="userModalCancelHandler"
+        />
+      </a-layout-content>
     </a-layout>
 </template>
 <script>
 import Vue from 'vue';
-import { Layout } from 'ant-design-vue';
+import { Layout, Button } from 'ant-design-vue';
 import OrgTree from '../components/Organization/OrgTree';
 import OrgModal from '../components/Organization/OpreatOrgModal';
+import UserList from '../components/Organization/UserList';
+import UserModal from '../components/Organization/UserModal';
 
 Vue.component(Layout.name, Layout);
 Vue.component(Layout.Sider.name, Layout.Sider);
 Vue.component(Layout.Content.name, Layout.Content);
+Vue.component(Button.name, Button);
 
 export default {
   components: {
     OrgTree,
     OrgModal,
+    UserList,
+    UserModal,
   },
   computed: {
     orgList() {
@@ -41,10 +70,31 @@ export default {
     orgName() {
       return this.$store.state.orgName;
     },
+    userList() {
+      return this.$store.state.userList;
+    },
+    userModalVisible() {
+      return this.$store.state.userModalVisible;
+    },
+    page() {
+      return this.$store.state.page;
+    },
+    pageSize() {
+      return this.$store.state.pageSize;
+    },
+    total() {
+      return this.$store.state.total;
+    },
+    userInfo() {
+      return this.$store.state.userInfo;
+    },
   },
   methods: {
     addOrg(orgId, level) {
-      this.$store.commit('addOrg', {
+      this.$store.commit('changeState', {
+        visible: true,
+        type: 'add',
+        orgName: '',
         orgId,
         level,
       });
@@ -59,10 +109,9 @@ export default {
         orgId,
       });
     },
-    setModalVisibleHandler(value) {
+    cancelHandler() {
       this.$store.commit('changeState', {
-        type: 'visible',
-        value,
+        visible: false,
       })
     },
     confirmHandler(name) {
@@ -75,7 +124,43 @@ export default {
           orgName: name,
         })
       }
-    }
+    },
+    addUserClick() {
+      this.$store.commit('changeState', {
+        userModalVisible: true,
+        type: 'add',
+      });
+    },
+    userModalConfirmHandler(values) {
+      console.log('value=', values);
+      if (this.type === 'add') {
+        this.$store.dispatch('addUser', values);
+      } else {
+
+      }
+    },
+    userModalCancelHandler() {
+      this.$store.commit('changeState', {
+        userModalVisible: false,
+      })
+    },
+    // 分页
+    changePageHandler(pageNum) {
+      this.$store.commit('changeState', {
+        page: pageNum,
+      });
+      this.$store.dispatch('getUserList');
+    },
+    editUser(userId) {
+      this.$store.dispatch('getUserInfo', {
+        userId,
+      });
+    },
+    deleteUser(userId) {
+      this.$store.dispatch('deleteUser', {
+        userId,
+      });
+    },
   },
   created() {
     this.$store.dispatch('getOrgList');
@@ -86,6 +171,31 @@ export default {
   .sider, .content {
     min-height: 400px;
     background: #fff;
+  }
+  .sider {
+    flex: none!important;
+    max-width: 300px!important;
+    width: 300px!important;
+  }
+  .content {
+    padding: 0 10px;
+
+    .btns {
+      margin-bottom: 10px;
+
+      .addBtn {
+        float: right;
+        margin-right: 10px;
+      }
+      .deleteBtn {
+        float: right;
+      }
+    }
+  }
+  .clearfix:after {
+    content: '';
+    display: block;
+    clear: both;
   }
 </style>
 

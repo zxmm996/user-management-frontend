@@ -35,13 +35,16 @@
           cancelText: '否',
         })
       },
+      menuClick({ key }) {
+        this.$emit('getUserList', key);
+      }
     },
     render() {
       const getOrgComponent = (treeData) => {
         return treeData.map(item => {
           if (item.children.length > 0) {
             return (
-              <a-sub-menu key={item._id} class="submenu">
+              <a-sub-menu key={item._id} class="submenu" onTitleClick={this.menuClick}>
                 <span slot="title">
                   <span>{item.orgName}</span>
                   <a-icon onClick={() => this.addOrg(item._id, item.level)} type="plus-square-o" class="plus" />
@@ -67,6 +70,7 @@
         <a-menu
             style="width: 300px"
             mode="inline"
+            onClick={this.menuClick}
           >
           {getOrgComponent(this.treeList)}
         </a-menu>

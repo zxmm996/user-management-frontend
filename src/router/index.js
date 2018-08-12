@@ -4,8 +4,6 @@ import Layout from '../views/Layout';
 import NotFound from '../components/Layout/NotFound';
 import Login from '../components/Login/Login';
 import UserPage from '../views/User';
-import OrganizationPage from '../views/Organization';
-import RolePage from '../views/Role';
 
 Vue.use(Router)
 
@@ -21,15 +19,7 @@ export default new Router({
           path: '/user',
           component: UserPage,
         },
-        {
-          path: '/organization',
-          component: OrganizationPage,
-        },
-        {
-          path: '/role',
-          component: RolePage,
-        },
-      ]
+      ],
     },
     {
       path: '/login',

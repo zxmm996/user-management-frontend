@@ -1,7 +1,6 @@
 <template>
   <div>
     <Header></Header>
-    <Menus></Menus>
     <div class="content">
       <router-view></router-view>
     </div>
@@ -11,12 +10,10 @@
 <script>
   import Header from '../components/Layout/Header';
   import Footer from '../components/Layout/Footer';
-  import Menus from '../components/Layout/Menus';
   export default {
     components: {
       Header,
       Footer,
-      Menus,
     }
   }
 </script>

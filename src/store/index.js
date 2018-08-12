@@ -109,7 +109,7 @@ const store = new Vuex.Store({
         }
       })
     },
-    editOrg(store, { orgName }) {
+    updateOrg(store, { orgName }) {
       axios.post('http://localhost:3000/updateOrganization', {
         orgName,
         orgId: store.state.orgId,
@@ -148,6 +148,7 @@ const store = new Vuex.Store({
     getUserList(store) {
       axios.get('http://localhost:3000/getUserListByPage', {
         params: {
+          orgId: store.state.orgId,
           page: store.state.page,
           pageSize: store.state.pageSize,
         }
@@ -218,37 +219,49 @@ const store = new Vuex.Store({
       })
     },
     // 修改用户
-    editUser(store, { orgName }) {
+    updateUser(store, payload) {
+      const {
+        userName,
+        userGender,
+        userBirthday,
+        userNum,
+        userPwd,
+        userOrgId,
+        userPhoneNum,
+      } = payload;
       axios.post('http://localhost:3000/updateUser', {
-        orgName,
-        orgId: store.state.orgId,
-      })
-      .then(function(res){
+        userId: store.state.userId,
+        userName,
+        userGender,
+        userBirthday,
+        userNum,
+        userPwd,
+        userOrgId,
+        userPhoneNum,
+    }).then(function(res){
         const { data } = res;
         store.commit('changeState', {
-          visible: false,
+          userModalVisible: false,
         });
         if (data.code === 1 && data.result) {
           message.success('修改成功', 1);
-          store.dispatch('getOrgList');
+          store.dispatch('getUserList');
         } else {
           message.error('修改失败', 1);
         }
       });
     },
     // 删除用户
-    deleteUser(store, { orgId }) {
-      axios.get('http://localhost:3000/deleteOrganization', {
+    deleteUser(store, { userId }) {
+      axios.get('http://localhost:3000/deleteUser', {
         params: {
-          orgId,
+          userId,
         },
       }).then(res => {
         const { data } = res;
         if (data.code === 1 && data.result) {
           message.success('删除成功', 1);
-          store.dispatch('getOrgList');
-        } else if (data.result === false) {
-          message.error('该机构下有子机构，不可删除', 1);
+          store.dispatch('getUserList');
         } else {
           message.error('删除失败', 1);
         }

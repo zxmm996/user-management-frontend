@@ -60,7 +60,7 @@
 </template>
 <script>
 import Vue from 'vue';
-import { Layout, Button } from 'ant-design-vue';
+import { Layout, Button, Modal } from 'ant-design-vue';
 import OrgTree from '../components/User/OrgTree';
 import OrgModal from '../components/User/OpreatOrgModal';
 import UserList from '../components/User/UserList';
@@ -195,11 +195,12 @@ export default {
         userId,
       });
     },
-    // 获取用户列表
+    // 点击机构获取用户列表
     getUserList(orgId) {
       this.$store.commit('changeState', {
         page: 1,
         orgId,
+        selectedUsers: [],
       });
       this.$store.dispatch('getUserList');
     },
@@ -211,7 +212,15 @@ export default {
     },
     // 复选人员删除
     deleteUsers() {
-      this.$store.dispatch('deleteUsers');
+       Modal.confirm({
+        title: '确认删除？',
+        onOk: () => {
+          this.$store.dispatch('deleteUsers');
+        },
+        okText: '是',
+        cancelText: '否',
+      })
+
     },
   },
   created() {

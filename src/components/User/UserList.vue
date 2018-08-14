@@ -117,7 +117,6 @@ export default {
       })
     },
     onChangeSelect(selectedRowKeys, selectedRows) {
-      console.log(selectedRowKeys, selectedRows);
       this.$emit('onChangeSelect', selectedRows);
     },
   },

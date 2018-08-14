@@ -18,9 +18,11 @@ const store = new Vuex.Store({
     userList: [],
     userModalVisible: false,
     page: 1,
-    pageSize: 10,
+    pageSize: 5,
     total: 0,
     userId: '',
+    // 复选的用户
+    selectedUsers: [],
   },
   mutations: {
     // 改变state
@@ -251,7 +253,7 @@ const store = new Vuex.Store({
         }
       });
     },
-    // 删除用户
+    // 删除单个用户
     deleteUser(store, { userId }) {
       axios.get('http://localhost:3000/deleteUser', {
         params: {
@@ -267,6 +269,26 @@ const store = new Vuex.Store({
         }
       })
     },
+    // 复选人员删除
+    deleteUsers(store) {
+      const selectedUsers = store.state.selectedUsers;
+      axios.get('http://localhost:3000/deleteUsers', {
+        params: {
+          userIds: selectedUsers.join(';'),
+        },
+      }).then(res => {
+        const { data } = res;
+        if (data.code === 1 && data.result) {
+          message.success('删除成功', 1);
+          store.dispatch('getUserList');
+          store.commit('changeState', {
+            selectedUsers: [],
+          });
+        } else {
+          message.error('删除失败', 1);
+        }
+      })
+    }
   },
 });
 export default store;

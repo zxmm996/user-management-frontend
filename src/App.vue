@@ -29,7 +29,8 @@ body {
   color: #2c3e50;
 }
 .ant-table-pagination.ant-pagination {
-  position: absolute!important;
+  float: left;
+  position: relative!important;
   left: 50%!important;
   transform: translate(-50%)!important;
 }

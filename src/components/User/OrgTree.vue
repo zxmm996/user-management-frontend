@@ -66,15 +66,21 @@
           }
         })
       }
-      return (
-        <a-menu
-            style="width: 300px"
-            mode="inline"
-            onClick={this.menuClick}
-          >
-          {getOrgComponent(this.treeList)}
-        </a-menu>
-      )
+
+      if (this.treeList.length> 0) {
+        return (
+          <a-menu
+              style="width: 300px"
+              mode="inline"
+              onClick={this.menuClick}
+              defaultOpenKeys={this.treeList.length> 0 ? [this.treeList[0]._id] : []}
+            >
+            {getOrgComponent(this.treeList)}
+          </a-menu>
+        )
+      } else {
+        return null;
+      }
     }
   }
 </script>

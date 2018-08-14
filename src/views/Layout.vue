@@ -29,7 +29,6 @@
     text-align: center;
   }
   .content {
-    min-height: 400px;
     width: 1200px;
     margin: 10px auto 0;
     background: #fff;

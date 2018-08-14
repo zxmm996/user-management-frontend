@@ -2,6 +2,10 @@ import Vuex from 'vuex';
 import Vue from 'vue'
 import { message } from 'ant-design-vue'
 import axios from 'axios';
+import config from '../utils/config.js'
+
+const serviceAddress = config.serviceAddress;
+
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -34,7 +38,7 @@ const store = new Vuex.Store({
   },
   actions: {
     login(store, { username, password, remember, router}) {
-      axios.post('http://localhost:3000/login',{
+      axios.post(`${serviceAddress}/login`,{
         userName: username,
         password: password,
       })
@@ -61,7 +65,7 @@ const store = new Vuex.Store({
     },
     // 获取机构树
     getOrgList(store) {
-      axios.get('http://localhost:3000/getOrgTree')
+      axios.get(`${serviceAddress}/getOrgTree`)
       .then(function(res){
         const { data } = res;
         if (data.code === 1 && data.result) {
@@ -72,7 +76,7 @@ const store = new Vuex.Store({
       });
     },
     addOrg(store, { orgName }) {
-      axios.post('http://localhost:3000/addOrganization', {
+      axios.post(`${serviceAddress}/addOrganization`, {
         orgName,
         orgType: '1',
         level: store.state.level,
@@ -96,7 +100,7 @@ const store = new Vuex.Store({
         orgId,
         type: 'edit',
       });
-      axios.get('http://localhost:3000/getOrgInfoById', {
+      axios.get(`${serviceAddress}/getOrgInfoById`, {
         params: {
           orgId,
         },
@@ -112,7 +116,7 @@ const store = new Vuex.Store({
       })
     },
     updateOrg(store, { orgName }) {
-      axios.post('http://localhost:3000/updateOrganization', {
+      axios.post(`${serviceAddress}/updateOrganization`, {
         orgName,
         orgId: store.state.orgId,
       })
@@ -131,7 +135,7 @@ const store = new Vuex.Store({
     },
     // 删除机构
     deleteOrg(store, { orgId }) {
-      axios.get('http://localhost:3000/deleteOrganization', {
+      axios.get(`${serviceAddress}/deleteOrganization`, {
         params: {
           orgId,
         },
@@ -148,7 +152,7 @@ const store = new Vuex.Store({
       })
     },
     getUserList(store) {
-      axios.get('http://localhost:3000/getUserListByPage', {
+      axios.get(`${serviceAddress}/getUserListByPage`, {
         params: {
           orgId: store.state.orgId,
           page: store.state.page,
@@ -179,7 +183,7 @@ const store = new Vuex.Store({
         userOrgId,
         userPhoneNum,
       } = payload;
-      axios.post('http://localhost:3000/addUser', {
+      axios.post(`${serviceAddress}/addUser`, {
         userName,
         userGender,
         userBirthday,
@@ -206,7 +210,7 @@ const store = new Vuex.Store({
         userId,
         type: 'edit',
       });
-      axios.get('http://localhost:3000/getUserInfoById', {
+      axios.get(`${serviceAddress}/getUserInfoById`, {
         params: {
           userId,
         },
@@ -231,7 +235,7 @@ const store = new Vuex.Store({
         userOrgId,
         userPhoneNum,
       } = payload;
-      axios.post('http://localhost:3000/updateUser', {
+      axios.post(`${serviceAddress}/updateUser`, {
         userId: store.state.userId,
         userName,
         userGender,
@@ -255,7 +259,7 @@ const store = new Vuex.Store({
     },
     // 删除单个用户
     deleteUser(store, { userId }) {
-      axios.get('http://localhost:3000/deleteUser', {
+      axios.get(`${serviceAddress}/deleteUser`, {
         params: {
           userId,
         },
@@ -272,7 +276,7 @@ const store = new Vuex.Store({
     // 复选人员删除
     deleteUsers(store) {
       const selectedUsers = store.state.selectedUsers;
-      axios.get('http://localhost:3000/deleteUsers', {
+      axios.get(`${serviceAddress}/deleteUsers`, {
         params: {
           userIds: selectedUsers.join(';'),
         },

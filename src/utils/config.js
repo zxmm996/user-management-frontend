@@ -1,3 +1,5 @@
-export default {
-  serviceAddress: 'http://localhost:3000',
+const ip = 'localhost';
+
+module.exports = {
+  baseUrl: `http://${ip}:3000`,
 }

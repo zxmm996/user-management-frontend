@@ -1,8 +1,13 @@
 import Vuex from 'vuex';
-import Vue from 'vue'
-import { message } from 'ant-design-vue'
+import Vue from 'vue';
+import { message } from 'ant-design-vue';
 import axios from 'axios';
-import config from '../utils/config.js'
+import config from '../utils/config.js';
+import {
+  login,      // 登录
+  getOrgTree, // 获取机构树
+  getUserList,    // 获取人员
+} from '../services/app.js';
 
 const serviceAddress = config.serviceAddress;
 
@@ -10,6 +15,8 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
+    // 网络状态 true-正常 false-断网
+    networkStatus: true,
     userInfo: null,
     isLogin: false,
     isRemember: false,
@@ -38,12 +45,11 @@ const store = new Vuex.Store({
   },
   actions: {
     login(store, { username, password, remember, router}) {
-      axios.post(`${serviceAddress}/login`,{
+      login({
         userName: username,
         password: password,
       })
-      .then(function(res){
-        const { data } = res;
+      .then(function(data){
         if (data.code === 1 && data.result) {
           router.push('/');
           if (remember) {
@@ -65,9 +71,8 @@ const store = new Vuex.Store({
     },
     // 获取机构树
     getOrgList(store) {
-      axios.get(`${serviceAddress}/getOrgTree`)
-      .then(function(res){
-        const { data } = res;
+      getOrgTree()
+      .then(function(data){
         if (data.code === 1 && data.result) {
           store.commit('changeState', {
             orgList: data.result,
@@ -152,14 +157,13 @@ const store = new Vuex.Store({
       })
     },
     getUserList(store) {
-      axios.get(`${serviceAddress}/getUserListByPage`, {
+      getUserList({
         params: {
           orgId: store.state.orgId,
           page: store.state.page,
           pageSize: store.state.pageSize,
         }
-      }).then((res) => {
-        const { data } = res;
+      }).then((data) => {
         let result = [];
         let total = 0;
         if (data.code == 1 && data.result && data.result.length > 0) {

@@ -45,7 +45,7 @@ const store = new Vuex.Store({
   },
   actions: {
     login(store, { username, password, remember, router}) {
-      login({
+      this._vm.$http.login({
         userName: username,
         password: password,
       })
@@ -71,7 +71,7 @@ const store = new Vuex.Store({
     },
     // 获取机构树
     getOrgList(store) {
-      getOrgTree()
+      this._vm.$http.getOrgTree()
       .then(function(data){
         if (data.code === 1 && data.result) {
           store.commit('changeState', {
@@ -81,14 +81,12 @@ const store = new Vuex.Store({
       });
     },
     addOrg(store, { orgName }) {
-      axios.post(`${serviceAddress}/addOrganization`, {
+      this._vm.$http.addOrg({
         orgName,
         orgType: '1',
         level: store.state.level,
         pId: store.state.orgId,
-      })
-      .then(function(res){
-        const { data } = res;
+      }).then(function(data){
         store.commit('changeState', {
           visible: false,
         });
@@ -105,13 +103,9 @@ const store = new Vuex.Store({
         orgId,
         type: 'edit',
       });
-      axios.get(`${serviceAddress}/getOrgInfoById`, {
-        params: {
-          orgId,
-        },
-      }).then(res => {
-        const { data } = res;
-
+      this._vm.$http.getOrgInfo({
+        orgId,
+      }).then(data => {
         if (data.code === 1 && data.result) {
           store.commit('changeState', {
             orgName: data.result.orgName,
@@ -121,12 +115,11 @@ const store = new Vuex.Store({
       })
     },
     updateOrg(store, { orgName }) {
-      axios.post(`${serviceAddress}/updateOrganization`, {
+      this._vm.$http.updateOrg({
         orgName,
         orgId: store.state.orgId,
       })
-      .then(function(res){
-        const { data } = res;
+      .then(function(data){
         store.commit('changeState', {
           visible: false,
         });
@@ -140,12 +133,9 @@ const store = new Vuex.Store({
     },
     // 删除机构
     deleteOrg(store, { orgId }) {
-      axios.get(`${serviceAddress}/deleteOrganization`, {
-        params: {
-          orgId,
-        },
-      }).then(res => {
-        const { data } = res;
+      this._vm.$http.deleteOrg({
+        orgId,
+      }).then(data => {
         if (data.code === 1 && data.result) {
           message.success('删除成功', 1);
           store.dispatch('getOrgList');
@@ -156,13 +146,12 @@ const store = new Vuex.Store({
         }
       })
     },
+    // 获取用户
     getUserList(store) {
-      getUserList({
-        params: {
-          orgId: store.state.orgId,
-          page: store.state.page,
-          pageSize: store.state.pageSize,
-        }
+     this._vm.$http.getUserList({
+        orgId: store.state.orgId,
+        page: store.state.page,
+        pageSize: store.state.pageSize,
       }).then((data) => {
         let result = [];
         let total = 0;
@@ -187,7 +176,7 @@ const store = new Vuex.Store({
         userOrgId,
         userPhoneNum,
       } = payload;
-      axios.post(`${serviceAddress}/addUser`, {
+      this._vm.$http.addUser({
         userName,
         userGender,
         userBirthday,
@@ -195,8 +184,7 @@ const store = new Vuex.Store({
         userPwd,
         userOrgId,
         userPhoneNum,
-      }).then(res => {
-        const { data } =res;
+      }).then(data => {
         if (data.code === 1 && data.result) {
           message.success('添加用户成功', 1);
           store.commit('changeState', {
@@ -214,12 +202,11 @@ const store = new Vuex.Store({
         userId,
         type: 'edit',
       });
-      axios.get(`${serviceAddress}/getUserInfoById`, {
+      this._vm.$http.getUserInfo({
         params: {
           userId,
         },
-      }).then(res => {
-        const { data } = res;
+      }).then(data => {
         if (data.code === 1 && data.result) {
           store.commit('changeState', {
             userInfo: data.result,
@@ -239,7 +226,7 @@ const store = new Vuex.Store({
         userOrgId,
         userPhoneNum,
       } = payload;
-      axios.post(`${serviceAddress}/updateUser`, {
+      this._vm.$http.updateUser({
         userId: store.state.userId,
         userName,
         userGender,
@@ -248,8 +235,7 @@ const store = new Vuex.Store({
         userPwd,
         userOrgId,
         userPhoneNum,
-    }).then(function(res){
-        const { data } = res;
+    }).then(function(data){
         store.commit('changeState', {
           userModalVisible: false,
         });
@@ -263,12 +249,9 @@ const store = new Vuex.Store({
     },
     // 删除单个用户
     deleteUser(store, { userId }) {
-      axios.get(`${serviceAddress}/deleteUser`, {
-        params: {
-          userId,
-        },
-      }).then(res => {
-        const { data } = res;
+      this._vm.$http.deleteUser({
+        userId,
+      }).then(data => {
         if (data.code === 1 && data.result) {
           message.success('删除成功', 1);
           store.dispatch('getUserList');
@@ -280,12 +263,9 @@ const store = new Vuex.Store({
     // 复选人员删除
     deleteUsers(store) {
       const selectedUsers = store.state.selectedUsers;
-      axios.get(`${serviceAddress}/deleteUsers`, {
-        params: {
-          userIds: selectedUsers.join(';'),
-        },
-      }).then(res => {
-        const { data } = res;
+      this._vm.$http.deleteUsers({
+        userIds: selectedUsers.join(';'),
+      }).then(data => {
         if (data.code === 1 && data.result) {
           message.success('删除成功', 1);
           store.dispatch('getUserList');

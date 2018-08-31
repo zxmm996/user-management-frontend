@@ -9,12 +9,11 @@ import {
   getUserList,    // 获取人员
 } from '../services/app.js';
 
-const serviceAddress = config.serviceAddress;
-
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
+    loginUserInfo: null,
     // 网络状态 true-正常 false-断网
     networkStatus: true,
     userInfo: null,
@@ -67,8 +66,9 @@ const store = new Vuex.Store({
             localStorage.removeItem('remember');
           }
           store.commit('changeState', {
-            userInfo: data.result,
+            loginUserInfo: data.result,
           })
+          localStorage.setItem('userInfo', data.result);
         } else {
           message.error('账号密码错误', 1);
         }
@@ -208,9 +208,7 @@ const store = new Vuex.Store({
         type: 'edit',
       });
       this._vm.$http.getUserInfo({
-        params: {
-          userId,
-        },
+        userId,
       }).then(data => {
         if (data.code === 1 && data.result) {
           store.commit('changeState', {

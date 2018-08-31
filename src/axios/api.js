@@ -1,13 +1,18 @@
 import axios from 'axios'
-import config from './config.js'
 import qs from 'qs' // 序列化请求数据，视服务端的要求
+import config from './config.js'
+import router from '../router/index.js';
 
 import { message } from 'ant-design-vue';
+
+// 携带cookie
+// axios.defaults.withCredentials = true
 
 export default function $axios(options) {
   return new Promise((resolve, reject) => {
     const instance = axios.create({
       baseURL: config.baseURL,
+      withCredentials: true, // 允许携带cookie
       headers: {
 		    'Content-Type': 'application/x-www-form-urlencoded'
 		  },
@@ -98,7 +103,17 @@ export default function $axios(options) {
               break
 
             case 401:
-              err.message = '未授权，请登录'
+              err.message = '未授权，请登录';
+              if (router.currentRoute.path === '/login') {
+              	return;
+              } else {
+            	  router.replace({
+			            path: 'login',
+			            query: {
+			              redirect: router.currentRoute.fullPath
+			            }
+			          })
+              }
               break
 
             case 403:

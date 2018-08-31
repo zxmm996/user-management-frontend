@@ -51,7 +51,12 @@ const store = new Vuex.Store({
       })
       .then(function(data){
         if (data.code === 1 && data.result) {
-          router.push('/');
+          const redirect = router.currentRoute.query.redirect;
+          if (redirect) {
+            router.push(redirect);
+          } else {
+            router.push('/');
+          }
           if (remember) {
             localStorage.setItem('username', username);
             localStorage.setItem('password', password);

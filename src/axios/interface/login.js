@@ -9,6 +9,15 @@ const login = data => {
   });
 };
 
+// 退出
+const logout = params => {
+  return axios({
+    url: '/logout',
+    method: 'get',
+  });
+};
+
 export default {
   login,
+  logout,
 };

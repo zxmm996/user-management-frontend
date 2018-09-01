@@ -11,9 +11,11 @@ import {
 
 Vue.use(Vuex);
 
+const loginUserInfo = localStorage.getItem('userInfo');
+
 const store = new Vuex.Store({
   state: {
-    loginUserInfo: null,
+    loginUserInfo:　loginUserInfo ? JSON.parse(loginUserInfo) : null,
     // 网络状态 true-正常 false-断网
     networkStatus: true,
     userInfo: null,
@@ -68,11 +70,15 @@ const store = new Vuex.Store({
           store.commit('changeState', {
             loginUserInfo: data.result,
           })
-          localStorage.setItem('userInfo', data.result);
+          localStorage.setItem('userInfo', JSON.stringify(data.result));
         } else {
           message.error('账号密码错误', 1);
         }
       })
+    },
+    logout(store, { router }){
+      this._vm.$http.logout();
+      router.push('/login');
     },
     // 获取机构树
     getOrgList(store) {

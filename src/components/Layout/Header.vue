@@ -6,14 +6,14 @@
           <span>{{title}}</span>
         </div>
         <div class="avatar">
-          <a-avatar size="large" style="backgroundColor:#87d068" icon="user" />
+          <a-avatar style="backgroundColor:#87d068" icon="user" />
           <a-dropdown>
             <a class="ant-dropdown-link" href="#">
-              管理员<a-icon type="down" />
+              {{userName}}<a-icon type="down" />
             </a>
             <a-menu slot="overlay">
               <a-menu-item>
-                <a href="javascript:;">退出登录</a>
+                <a href="javascript:;" @click="logout">退出登录</a>
               </a-menu-item>
             </a-menu>
           </a-dropdown>
@@ -35,6 +35,18 @@ export default {
     return {
       title: "User Management"
     }
+  },
+  computed: {
+    userName() {
+      return this.$store.state.loginUserInfo.userName;
+    },
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('logout', {
+        router: this.$router,
+      });
+    },
   }
 }
 </script>
@@ -65,6 +77,13 @@ export default {
       .avatar {
         display: flex;
         align-items: center;
+
+        .ant-dropdown-link {
+          height: 30px;
+          line-height: 30px;
+          padding-left: 40px;
+          margin-left: -30px;
+        }
       }
     }
   }

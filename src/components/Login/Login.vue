@@ -23,7 +23,7 @@
               rules: [{ required: true, message: '请输入密码' }],
               }"
           >
-            <a-input size="large" @keyup.enter="handleSubmit">
+            <a-input type="password" size="large" @keyup.enter="handleSubmit">
               <a-icon slot="prefix" type="lock" size="large" />
             </a-input>
           </a-form-item>

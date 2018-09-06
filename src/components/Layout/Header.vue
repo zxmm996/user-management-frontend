@@ -5,7 +5,7 @@
           <img src="../../assets/logo.png" alt="">
           <span>{{title}}</span>
         </div>
-        <div class="avatar">
+        <div class="avatar" v-if="userName" >
           <a-avatar style="backgroundColor:#87d068" icon="user" />
           <a-dropdown>
             <a class="ant-dropdown-link" href="#">
@@ -38,7 +38,7 @@ export default {
   },
   computed: {
     userName() {
-      return this.$store.state.loginUserInfo.userName;
+      return this.$store.state.loginUserInfo ? this.$store.state.loginUserInfo.userName : false;
     },
   },
   methods: {

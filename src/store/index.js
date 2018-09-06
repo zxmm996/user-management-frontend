@@ -12,7 +12,7 @@ import {
 Vue.use(Vuex);
 
 const loginUserInfo = localStorage.getItem('userInfo');
-
+console.log('loginUserInfo=', loginUserInfo);
 const store = new Vuex.Store({
   state: {
     loginUserInfo:　loginUserInfo ? JSON.parse(loginUserInfo) : null,
@@ -79,6 +79,7 @@ const store = new Vuex.Store({
     logout(store, { router }){
       this._vm.$http.logout();
       router.push('/login');
+      localStorage.removeItem('userInfo');
     },
     // 获取机构树
     getOrgList(store) {

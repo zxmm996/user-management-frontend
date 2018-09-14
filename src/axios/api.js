@@ -2,6 +2,7 @@ import axios from 'axios'
 import qs from 'qs' // 序列化请求数据，视服务端的要求
 import config from './config.js'
 import router from '../router/index.js';
+import store from '../store/index.js';
 
 import { message } from 'ant-design-vue';
 
@@ -15,7 +16,7 @@ export default function $axios(options) {
 		  timeout: config.timeout,
       withCredentials: true, // 允许携带cookie
       headers: {
-		    'Content-Type': 'application/x-www-form-urlencoded'
+		    'Content-Type': 'application/x-www-form-urlencoded',
 		  },
       transformResponse: [function(data) {}]
     });
@@ -27,11 +28,17 @@ export default function $axios(options) {
 
         // Tip: 2 
         // 带上 token , 可以结合 vuex 或者重 localStorage
-        // if (store.getters.token) {
-        //     config.headers['X-Token'] = getToken() // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
-        // } else {
-        //     // 重定向到登录页面    
-        // }
+        if (store.state.token) {
+            config.headers['Authorization'] = store.state.token; // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
+        } else {
+        // 重定向到登录页面
+          router.replace({
+            path: 'login',
+            query: {
+              redirect: router.currentRoute.fullPath
+            }
+          })
+        }
         // Tip: 3
         // 根据请求方法，序列化传来的参数，根据后端需求是否序列化
         if (config.method.toLocaleLowerCase() === 'post' ||

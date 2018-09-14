@@ -2,22 +2,16 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 import { message } from 'ant-design-vue';
 import axios from 'axios';
-import config from '../utils/config.js';
-import {
-  login,      // 登录
-  getOrgTree, // 获取机构树
-  getUserList,    // 获取人员
-} from '../services/app.js';
 
 Vue.use(Vuex);
 
 const loginUserInfo = localStorage.getItem('userInfo');
+const token = localStorage.getItem('token');
 console.log('loginUserInfo=', loginUserInfo);
 const store = new Vuex.Store({
   state: {
     loginUserInfo:　loginUserInfo ? JSON.parse(loginUserInfo) : null,
-    // 网络状态 true-正常 false-断网
-    networkStatus: true,
+    token:token ? token : null,
     userInfo: null,
     isLogin: false,
     isRemember: false,
@@ -51,9 +45,10 @@ const store = new Vuex.Store({
         password: password,
       })
       .then(function(data){
+        console.log('data=', data);
         if (data.code === 1 && data.result) {
           const redirect = router.currentRoute.query.redirect;
-          if (redirect) {
+          if (redirect && redirect !== '/login') {
             router.push(redirect);
           } else {
             router.push('/');
@@ -69,8 +64,10 @@ const store = new Vuex.Store({
           }
           store.commit('changeState', {
             loginUserInfo: data.result,
+            token: data.token,
           })
           localStorage.setItem('userInfo', JSON.stringify(data.result));
+          localStorage.setItem('token', data.token);
         } else {
           message.error('账号密码错误', 1);
         }
@@ -80,6 +77,7 @@ const store = new Vuex.Store({
       this._vm.$http.logout();
       router.push('/login');
       localStorage.removeItem('userInfo');
+      localStorage.removeItem('token');
     },
     // 获取机构树
     getOrgList(store) {

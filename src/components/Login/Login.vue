@@ -1,6 +1,6 @@
 <template>
   <div class="normal">
-    <Header></Header>
+    <Header avatar="hide"></Header>
     <div class="content">
       <div class="form">
         <a-form :autoFormCreate="(form)=>{this.form = form}">

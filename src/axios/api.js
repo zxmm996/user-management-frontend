@@ -14,7 +14,7 @@ export default function $axios(options) {
     const instance = axios.create({
       baseURL: config.baseURL,
 		  timeout: config.timeout,
-      withCredentials: true, // 允许携带cookie
+      // withCredentials: true, // 允许携带cookie
       headers: {
 		    'Content-Type': 'application/x-www-form-urlencoded',
 		  },

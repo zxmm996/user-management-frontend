@@ -78,6 +78,9 @@ const store = new Vuex.Store({
       router.push('/login');
       localStorage.removeItem('userInfo');
       localStorage.removeItem('token');
+      store.commit('changeState', {
+       token: null,
+      });
     },
     // 获取机构树
     getOrgList(store) {

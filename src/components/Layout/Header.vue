@@ -5,7 +5,7 @@
           <img src="../../assets/logo.png" alt="">
           <span>{{title}}</span>
         </div>
-        <div class="avatar" v-if="userName" >
+        <div class="avatar" v-if="avatar !== 'hide'" >
           <a-avatar style="backgroundColor:#87d068" icon="user" />
           <a-dropdown>
             <a class="ant-dropdown-link" href="#">
@@ -31,6 +31,11 @@ Vue.component(Menu.Item.name, Menu.Item);
 Vue.component(Dropdown.name, Dropdown);
 
 export default {
+  props: {
+    avatar: {
+      type: String,
+    },
+  },
   data() {
     return {
       title: "User Management"

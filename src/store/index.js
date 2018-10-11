@@ -74,7 +74,7 @@ const store = new Vuex.Store({
       })
     },
     logout(store, { router }){
-      this._vm.$http.logout();
+      // this._vm.$http.logout();
       router.push('/login');
       localStorage.removeItem('userInfo');
       localStorage.removeItem('token');

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import qs from 'qs' // 序列化请求数据，视服务端的要求
-import config from './config.js'
+import config from '../config.js'
 import router from '../router/index.js';
 import store from '../store/index.js';
 

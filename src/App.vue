@@ -5,12 +5,13 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import { Button, message } from 'ant-design-vue'
-Vue.component(Button.name, Button)
-export default {
-  name: 'App'
-}
+  import Vue from 'vue';
+  import { Button, message } from 'ant-design-vue';
+
+  Vue.component(Button.name, Button)
+  export default {
+    name: 'App'
+  }
 </script>
 
 <style>

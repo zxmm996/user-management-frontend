@@ -7,7 +7,7 @@ import router from './router';
 import store from './store/index.js';
 import api from './axios/index';
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 Vue.use(api);
 
@@ -19,4 +19,4 @@ new Vue({
   components: { App },
   template: '<App/>',
   store,
-})
+});

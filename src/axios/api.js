@@ -1,5 +1,5 @@
-import axios from 'axios'
-import qs from 'qs' // 序列化请求数据，视服务端的要求
+import axios from 'axios';
+import qs from 'qs'; // 序列化请求数据，视服务端的要求
 import config from '../config.js'
 import router from '../router/index.js';
 import store from '../store/index.js';
@@ -29,7 +29,7 @@ export default function $axios(options) {
         // Tip: 2 
         // 带上 token , 可以结合 vuex 或者重 localStorage
         if (store.state.token) {
-            config.headers['Authorization'] = store.state.token; // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
+            config.headers['Authorization'] = store.state.token; // 让每个请求携带token--['Authorization']为自定义key 请根据实际情况自行修改
         } else {
         // 重定向到登录页面
           router.replace({

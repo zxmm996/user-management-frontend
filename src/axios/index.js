@@ -1,10 +1,11 @@
-import apiLogin from './interface/login'
-import apiOrganization from './interface/organization'
-import apiUser from './interface/user'
+import apiLogin from './interface/login';
+import apiOrganization from './interface/organization';
+import apiUser from './interface/user';
 
 const install = Vue => {
-  if (install.installed)
+  if (install.installed) {
     return;
+  }
   install.installed = true;
 
   Object.defineProperties(Vue.prototype, {
@@ -25,6 +26,6 @@ const install = Vue => {
       }
     }
   })
-}
+};
 
-export default install
+export default install;

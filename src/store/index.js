@@ -7,7 +7,7 @@ Vue.use(Vuex);
 
 const loginUserInfo = localStorage.getItem('userInfo');
 const token = localStorage.getItem('token');
-console.log('loginUserInfo=', loginUserInfo);
+
 const store = new Vuex.Store({
   state: {
     loginUserInfo:　loginUserInfo ? JSON.parse(loginUserInfo) : null,

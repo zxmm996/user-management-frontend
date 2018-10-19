@@ -18,16 +18,6 @@
   }
 </script>
 <style lang="less" scoped>
-  .header {
-    height: 120px;
-    line-height: 120px;
-    text-align: center;
-  }
-  .footer {
-    height: 80px;
-    line-height: 80px;
-    text-align: center;
-  }
   .content {
     width: 1200px;
     margin: 10px auto 0;

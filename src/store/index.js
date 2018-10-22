@@ -11,7 +11,7 @@ const token = localStorage.getItem('token');
 const store = new Vuex.Store({
   state: {
     loginUserInfo:　loginUserInfo ? JSON.parse(loginUserInfo) : null,
-    token:token ? token : null,
+    token: token ? token : null,
     userInfo: null,
     isLogin: false,
     isRemember: false,

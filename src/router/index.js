@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Layout from '../views/Layout';
-import NotFound from '../components/Layout/NotFound';
-import Login from '../components/Login/Login';
-import UserPage from '../views/User';
+import Layout from '../pages/Layout';
+import NotFound from '../components/common/NotFound';
+import LoginPage from '../pages/login/index.vue';
+import UserPage from '../pages/user/index.vue';
 
 Vue.use(Router)
 
@@ -24,7 +24,7 @@ export default new Router({
     {
       path: '/login',
       name: 'login',
-      component: Login,
+      component: LoginPage,
     },
     {
       path: '*',

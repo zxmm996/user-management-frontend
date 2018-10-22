@@ -46,8 +46,8 @@
 <script>
   import Vue from 'vue';
   import { Icon, Button, Input, Form, Checkbox } from 'ant-design-vue';
-  import Header from '../Layout/Header';
-  import Footer from '../Layout/Footer';
+  import Header from '../../components/common/Header';
+  import Footer from '../../components/common/Footer';
 
   Vue.component(Icon.name, Icon);
   Vue.component(Button.name, Button);

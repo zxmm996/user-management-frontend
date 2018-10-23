@@ -1,4 +1,4 @@
-import axios from './../api'
+import axios from './../request'
 
 const getExample = params => {
   return axios({

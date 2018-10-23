@@ -1,4 +1,4 @@
-import axios from './../api'
+import axios from './../request'
 
 // 分页获取人员
 const getUserList = params => {
